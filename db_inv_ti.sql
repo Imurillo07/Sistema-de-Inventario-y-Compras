@@ -1,7 +1,8 @@
-create database db_inv.ti;
+create database db_inv_ti;
+USE db_inv_ti;
 
 create table areas(
-    area varchar(100) primary key
+	area varchar (100) primary key
 );
 
 create table estado_equipo(
@@ -40,9 +41,9 @@ create table historial_mantenimientos(
 );
 
 create table productos(
-    codigé vahchar(50) primary key,
+    codigo varchar(50) primary key,
     nom_producto varchar(100) not null,
-    desc_producto text not nulls
+    desc_producto text not null,
     pre_publico double not null,
     pre_proveedor double not null,
     existencias int not null
@@ -66,18 +67,18 @@ insert into areas (area) values
 ('ventas');
 
 insert into productos (codigo, nom_producto,desc_producto, pre_publico, pre_proveedor, existencias) values
-('H001', 'Detergente Liquido Ariel 4.65L', 'Detergente liquido para ropa con poder quita manchas', 120.00, 100.00, 12).
-('H002', 'Papel Higienico Regio 32 Rollos', 'Papel higienico doble hoja, ultra suave, paquete economico', 189.00, 150.00, 15).
-('H003', 'Fabuloso Lavanda 1.8L', 'Limpiador multiuso con aroma a lavanda, ideal para pisos y superficies', 35.00, 20.00, 42).
-('H004', 'Esponja Scotch-Brite Pack x3', 'Esponjas multiusos resistentes para cocina y bano', 28.00, 18.00, 80).
-('H005', 'Trapeador Microfibra con Palo', 'Trapeador ultra absorbente con cabeza giratoria', 75.00, 50.00, 35).
-('H006', 'Juego de 6 Vasos de Vidrio', 'Vasos resistentes y elegantes para bebidas frias', 95.00, 70.00, 20).
-('H007', 'Sarten Antiadherente 24cm', 'Sarten de aluminio con recubrimiento antiaderente y mango ergonomico', 120.00, 105.00, 31).
-('H008', 'Ambiertador Glade Manzana Canela', 'Aerosol aromatizante para el hogar', 32.00, 22.00, 50).
-('H009', 'Cubo de Basura con Tapa 25L', 'Contenedor de plastico resistente con pedal y tapa hermetica', 110.00, 80.00, 18).
-('H010', 'Toalla de Cocina Absorbentes x3', 'Toallas de tela absorbente reutilizables para cocina', 48.00, 30.00, 45).
+('H001', 'Detergente Liquido Ariel 4.65L', 'Detergente liquido para ropa con poder quita manchas', 120.00, 100.00, 12),
+('H002', 'Papel Higienico Regio 32 Rollos', 'Papel higienico doble hoja, ultra suave, paquete economico', 189.00, 150.00, 15),
+('H003', 'Fabuloso Lavanda 1.8L', 'Limpiador multiuso con aroma a lavanda, ideal para pisos y superficies', 35.00, 20.00, 42),
+('H004', 'Esponja Scotch-Brite Pack x3', 'Esponjas multiusos resistentes para cocina y bano', 28.00, 18.00, 80),
+('H005', 'Trapeador Microfibra con Palo', 'Trapeador ultra absorbente con cabeza giratoria', 75.00, 50.00, 35),
+('H006', 'Juego de 6 Vasos de Vidrio', 'Vasos resistentes y elegantes para bebidas frias', 95.00, 70.00, 20),
+('H007', 'Sarten Antiadherente 24cm', 'Sarten de aluminio con recubrimiento antiaderente y mango ergonomico', 120.00, 105.00, 31),
+('H008', 'Ambiertador Glade Manzana Canela', 'Aerosol aromatizante para el hogar', 32.00, 22.00, 50),
+('H009', 'Cubo de Basura con Tapa 25L', 'Contenedor de plastico resistente con pedal y tapa hermetica', 110.00, 80.00, 18),
+('H010', 'Toalla de Cocina Absorbentes x3', 'Toallas de tela absorbente reutilizables para cocina', 48.00, 30.00, 45);
 
-insert into estados_equipo (estado) values
+insert into estado_equipo (estado) values
 ('activo'),
 ('mantenimiento'),
 ('baja'),
