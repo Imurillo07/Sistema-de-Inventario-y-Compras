@@ -95,7 +95,120 @@ router.post('/equipos/reporte/add', (req, res) => {
                 }
 
                 //confirmar transaccion
+                db.commit((err) => {
+                    if(err) {
+                        return db.rollback(() => {
+                            console.error('Error al confirmar la transaccion', err)
+                            return res.status(500).send('Error al confirmar la transaccion')
+                        })
+                    }
+
+                    res.status(200).send('Estado actualizado a manteninimiento y reporte registrado exitosamente')
+                })
             })
         })
     })
+})
+
+//Ruta para obntener los mantenimientos ordernados por fechas de reporte y falta de solucion
+router.get('/equipos/mantenimientos', (req, res) => {
+    const query = 'SELECT * FROM historial_mantenimiento WHERE fehca_soluciones IS NULL ORDER BY fecha_reporte ASC'
+
+    db.query(query, (err, results) => {
+        if(err) {
+            return res.status(500).send('Error en la consulta')
+        }
+
+        res.json(results)
+    })
+})
+
+//ruta para actualizar la solucion en el historial y cambiar el estado del equipo
+router.post('/equipos/mantenimientos/update', (req, res) => {
+    const { num_serie, id_historial, tecnico, solucion} = req.body
+
+    if(!num_serie || !id_historial || !tecnico || !solucion) {
+        return res.status(400).send('El id, numero de serie, tecnico y solucion son requeridos')
+    }
+
+    //obtener la fecha con el formato deseado
+    const fecha = new Date()
+
+    const anio = fecha.getFullYear()
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0')
+    const dia = String(fecha.getDate()).padStart(2, '0')
+
+    const fecha_solucion = `${anio}-${mes}-${dia}`
+
+    //iniciar transaccion
+    db.beginTransaction((err) => {
+        if(err){
+            return res.status(500).send('Error al iniciar la transaccion')
+        }
+
+        //actualizamos el estado del equipo a activo
+        const updateEstadoQuery = 'UPDATE equipos SET estado="activo" WHERE num_serie=?'
+
+        db.query(updateEstadoQuery, [num_serie], (err, result) =>{
+            if(err) {
+                return db.rollback(() => {
+                    console.error('Error al analizar el estado', err)
+                    return res.status(500).send('Error al actualizae el esatdo del equipo')
+                })
+            }
+
+            //actualizamos el registro de la tabla historial_mantenimientos
+            const updateHistorialQuery = `
+                UPDATE
+                    historial_mantenimientos
+                SET
+                    fecha_solucion = ?,
+                    usuario_tecnico = ?,
+                    solucion = ?
+                WHERE
+                id_historial = ?
+            `
+
+            db.query(updateHistorialQuery, [fecha_solucion, tecnico, solucion, id_historial], (err, result) => {
+                if(err) {
+                    return db.rollback(() => {
+                        console.error('Error al actualizar el historial', err)
+                        return res.status(500).send('Error al actualizar el historial')
+                    })
+                }
+
+                //confirmar la transaccion
+                db.commit((err) => {
+                    if(err) {
+                        return db.rollback(() =>{
+                            console.error('Error al conformar la transaccion', err)
+                            return res.status(500).send('Error al confirmar la transaccion')
+                        })
+                    }
+
+                    res.status(200).send('Estado del equipo actualizado a activo y mantenimiento actualizado')
+                })
+            })
+        })
+    })
+})
+
+
+//ruta para obtener los mantenimientos  por id_historial, num_serie o tecnico
+router.post ('/equipos/mantenimientos/find', (req, res) => {
+    const { filter } = req.body
+
+    if(!filter) {
+        return res.status(400).json({
+            error: 'Se debe proporcionar al menos uno de los parametros'
+        })
+    }
+
+    const query = `SELECT * FROM historial_mantenimientos WHERE id_historial = '${filter}'
+    OR num_serie = '${filter}'
+    OR usuario_tecnico '${filter}'
+    AND solucion IS NOT NULL
+    `
+
+    
 })
