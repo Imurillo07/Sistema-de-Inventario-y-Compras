@@ -210,5 +210,13 @@ router.post ('/equipos/mantenimientos/find', (req, res) => {
     AND solucion IS NOT NULL
     `
 
-    
+    db.query(query, [filter], (err, results) => {
+        if (err) {
+            return res.status(500).send('Error en la consulta')
+        }
+
+        res.json(results)
+    })
 })
+
+module.exports = router
