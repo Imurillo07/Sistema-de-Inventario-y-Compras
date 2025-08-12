@@ -59,5 +59,28 @@ router.put('/productos/:codigo', (req, res) =>{
     const { nom_producto, desc_producto, pre_publico, pre_proveedor, existencias } = req.body
 
     const query = 'UDPATE productos SET nom_producto=?, desc_producto=?, pre_publico=?, pre_proveedor=?, existencias=? WHERE codigo=?'
-    
+    db.query(query, [nom_producto, desc_producto, pre_publico, pre_proveedor, existencias, codigo], (err, result) =>{
+        if(err){
+            return res.status(500).send('Error al actualizar el producto')
+        }
+
+        res.send('Producto actualizado')
+    })
 })
+
+// ruta para eliminar un producto
+router.delete('/productos/:producto', (req, res) => {
+    const { producto } = req.params
+
+    const query = `DELETE FROM productos WHERE codigo = ?`
+
+    db.query(query, [producto], (err, result) => {
+        if(err){
+            return res.status(500).send('Error al eliminar el producto')
+        }
+        
+        res.send('Producto eliminado')
+    })
+})
+
+module.exports = router
