@@ -7,12 +7,12 @@ router.get('/productos', (req, res) =>{
 
     const query = 'SELECT * FROM productos'
 
-    db.query(query, (err, results) => {
+    db.query(query, (err, result) => {
         if (err) {
             return res.status(500).send('Error en la consulta')
         }
 
-        res.json(results)
+        res.json(result)
     })
 })
 
@@ -21,7 +21,7 @@ router.get('/producto', (req, res) => {
     const { codigo } = req.query
 
     const query = 'SELECT codigo, nom_producto, pre_publico FROM productos WHERE codigo = ?'
-    db.query(query, [codigo], (err, results) =>{
+    db.query(query, [codigo], (err, result) =>{
         if (err) {
             return res.status(500).send('Error al obtener el producto')
         }
