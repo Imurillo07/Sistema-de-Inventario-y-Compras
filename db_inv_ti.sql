@@ -96,3 +96,7 @@ INSERT INTO equipos (  num_serie, equipo, area, descripcion, estado, responsable
 ('E008', 'Teclado Mecánico Logitech', 'tecnologia', 'Teclado mecánico para desarrollo', 'activo', NULL, '2024-01-02', '2024-01-03', NULL),
 ('E009', 'Router Cisco 2900', 'tecnologia', 'Router para red corporativa', 'mantenimiento', 'Jorge Castro', '2020-02-10', '2020-02-15', '2023-10-10'),
 ('E010', 'Tablet Samsung Galaxy Tab', 'administracion', 'Tablet para gestión de tareas', 'activo', 'Daniela Vargas', '2023-09-10', '2023-09-15', NULL);
+
+INSERT INTO usuarios (usuario, contrasena, nombre, area, correo, estado) VALUES
+('isaac', '1234', 'Isaac Murillo', 'tecnologia', 'isaac@example.com', 'activo'),
+('maria', 'abcd', 'Maria Gonzalez', 'administracion', 'maria@example.com', 'activo');
