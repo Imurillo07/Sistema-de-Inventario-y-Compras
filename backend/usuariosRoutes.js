@@ -16,7 +16,7 @@ router.post('/login', (req, res) =>{
             return res.status(500).send('Error en la consulta')
         }
 
-        if(ressults.length === 0) {
+        if(result.length === 0) {  
             return res.status(401).send('Usuario no encontrado')
         }
 
@@ -35,7 +35,7 @@ router.post('/login', (req, res) =>{
 })
 
 //ruta para obtener todos los usuarios
-router.get('/usuario', (req, res) => {
+router.get('/usuarios', (req, res) => {
     db.query('SELECT usuario, nombre, area, correo, estado FROM usuarios', (err, result) => {
         if(err) {
             return res.status(500).send('Error en la consulta')
@@ -53,31 +53,32 @@ router.post('/usuarios', (req, res) => {
         return res.status(400).send('Todos los campos son obligatorios')
     }
 
-    const query = `INSERT INTO usuarios(usuario, contrasena, nombre, area, correo, estado) 
-    VALUES (?,?,?,?,?,'activo')`
+        const query = `INSERT INTO usuarios(usuario, contrasena, nombre, area, correo, estado) 
+        VALUES (?,?,?,?,?,'activo')`
 
-    db.query(query, [usuario, contrasena, nombre, area, correo, estado], (err, result) =>{
-        if(err) {
-            console.error('Error al agregar el uauario', err)
-            return res.status(500).send('Error al agregar el usuario')
-        }
+        db.query(query, [usuario, contrasena, nombre, area, correo], (err, result) => {
+            if(err) {
+                console.error('Error al agregar el usuario', err)
+                return res.status(500).send('Error al agregar el usuario')
+            }
 
-        res.status(200).send({
+            res.status(200).send({
             usuario, contrasena, nombre, area, correo, estado
         })
     })
+
 })
 
 //ruta para editar un usuario
 router.put('/usuarios/:usuario', (req, res) => {
     const { usuario } = req.params
-    const { nombre, contrasena, area, correo, esatdo } = req.body
+    const { nombre, contrasena, area, correo, estado } = req.body 
 
     const query = 'UPDATE usuarios SET nombre=?, contrasena=?, area=?, correo=?, estado=? WHERE usuario=?'
 
     db.query(query, [nombre, contrasena, area, correo, estado, usuario], (err, result) =>{
         if(err) {
-            return res.status(500).send('Errror al actualizar el usuario')
+            return res.status(500).send('Error al actualizar el usuario') 
         }
 
         res.send('Usuario actualizado')
@@ -88,7 +89,7 @@ router.put('/usuarios/:usuario', (req, res) => {
 router.delete('/usuarios/:usuario', (req, res) => {
     const { usuario } = req.params
 
-    const query = 'DELETE FROM usuarios WHERE usuarios=?'
+    const query = 'DELETE FROM usuarios WHERE usuario=?' 
 
     db.query(query, [usuario], (err, result) => {
         if(err) {

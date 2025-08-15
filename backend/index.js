@@ -13,7 +13,7 @@ const e = require('cors')
 const app = express()
 
 //permitir solicutudes de otros dominios
-app.use,(cors())
+app.use(cors())
 
 //middleware para analizar json
 app.use(bodyParser.json())
